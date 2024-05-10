@@ -6,4 +6,6 @@ void main() {
     home: TelaInicial(listaTarefas: []),
     debugShowCheckedModeBanner: false,
   ));
+
+  //SÓ PRA VER COMO CRIA OUTRA BRANCH
 }

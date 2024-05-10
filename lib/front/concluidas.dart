@@ -26,7 +26,7 @@ class _ConcluidasState extends State<Concluidas> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Concluídas'),
+        title: const Text('Concluídas'),
       ),
       body: Center(
         child: ListView.builder(

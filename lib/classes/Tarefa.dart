@@ -1,9 +1,7 @@
-
-
 class TarefaBox {
   final String nome;
   final DateTime hora;
-  final String ?descricao;
+  final String? descricao;
   final int prioridade;
   late final bool concluida;
 
@@ -20,5 +18,3 @@ class TarefaBox {
     return 'TarefaBox{nome: $nome, hora: $hora, prioridade: $prioridade, descricao: $descricao, concluida: $concluida}';
   }
 }
-
-

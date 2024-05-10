@@ -16,7 +16,7 @@ class TelaInicial extends StatefulWidget {
 
 class _TelaInicialState extends State<TelaInicial> {
   late List<TarefaBox> listaTarefas;
-  List<TarefaBox> listaConcluida = [];
+  late List<TarefaBox> listaConcluida = [];
 
   @override
   void initState() {
@@ -39,13 +39,13 @@ class _TelaInicialState extends State<TelaInicial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menu'),
+        title: const Text('Menu'),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
@@ -58,7 +58,7 @@ class _TelaInicialState extends State<TelaInicial> {
               ),
             ),
             ListTile(
-              title: Text('Criar Nova Tarefa'),
+              title: const Text('Criar Nova Tarefa'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -69,18 +69,18 @@ class _TelaInicialState extends State<TelaInicial> {
               },
             ),
             ListTile(
-              title: Text('Completas'),
+              title: const Text('Completas'),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          Concluidas(listaTarefas: listaConcluida)),
+                          Concluidas(listaTarefas: listaTarefas)),
                 );
               },
             ),
             ListTile(
-              title: Text('Pesquisar'),
+              title: const Text('Pesquisar'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -97,9 +97,7 @@ class _TelaInicialState extends State<TelaInicial> {
         child: ListView.builder(
           itemCount: listaTarefas.length,
           itemBuilder: (context, index) {
-            return TarefaBoxWidget(
-              valor: listaTarefas[index],
-            );
+            return TarefaBoxWidget(valor: listaTarefas[index]);
           },
         ),
       ),

@@ -13,6 +13,8 @@ class Pesquisar extends StatefulWidget {
 }
 
 final TextEditingController horaController = TextEditingController();
+final TextEditingController nomeController = TextEditingController();
+final TextEditingController descricaoController = TextEditingController();
 
 int prioridadeSelecionada = 1;
 
@@ -34,22 +36,38 @@ class _PesquisarState extends State<Pesquisar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pesquisar Tarefa'),
+        title: const Text('Pesquisar Tarefa'),
       ),
       body: Column(
         children: [
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
+          TextField(
+            controller: nomeController,
+            decoration: const InputDecoration(
+              labelText: 'Nome',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          TextField(
+            controller: descricaoController,
+            decoration: const InputDecoration(
+              labelText: 'Descrição',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16.0),
           TextField(
             controller: horaController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Data',
               hintText: 'dd/MM/aaaa hh:mm',
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Container(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
               borderRadius: BorderRadius.circular(8.0),
@@ -58,13 +76,13 @@ class _PesquisarState extends State<Pesquisar> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Propriedade:',
+                  const Text(
+                    'Prioriedade:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   DropdownButton<int>(
                     value: prioridadeSelecionada,
                     onChanged: (int? novoVal) {
@@ -72,10 +90,10 @@ class _PesquisarState extends State<Pesquisar> {
                         prioridadeSelecionada = novoVal!;
                       });
                     },
-                    items: List.generate(5, (index) {
+                    items: List.generate(6, (index) {
                       return DropdownMenuItem<int>(
-                        value: index + 1,
-                        child: Text((index + 1).toString()),
+                        value: index,
+                        child: Text((index).toString()),
                       );
                     }),
                   ),
@@ -86,58 +104,83 @@ class _PesquisarState extends State<Pesquisar> {
           SizedBox(
             width: double.infinity,
             child: Padding(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: const Color.fromARGB(255, 33, 191, 243),
+                  backgroundColor: const Color.fromARGB(255, 33, 191, 243),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
                 onPressed: () {
-                  try {
-                    data = DateFormat('dd/MM/yyyy HH:mm').parseStrict(horaController.text);
-                  } catch (e) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Data Inválida'),
-                          content: Text(
-                              'A data inserida não é válida. Por favor, insira uma data no formato correto (dd/MM/yyyy HH:mm).'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                  if (horaController.text.isNotEmpty) {
+                    try {
+                      data = DateFormat('dd/MM/yyyy HH:mm')
+                          .parseStrict(horaController.text);
+                    } catch (e) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Data Inválida'),
+                            content: const Text(
+                                'A data inserida não é válida. Por favor, insira uma data no formato correto (dd/MM/yyyy HH:mm).'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   }
 
-                  listaPesquisada = listaTarefas
-                      .where((tarefa) =>
-                          tarefa.prioridade >= prioridadeSelecionada &&
-                          tarefa.hora == data!)
-                      .toList(); 
+                  listaPesquisada = listaTarefas.where((tarefa) {
+                    bool atendePrioridade = true;
+                    bool atendeHora = true;
+                    bool atendeNome = true;
+                    bool atendeDescricao = true;
+
+                    if (prioridadeSelecionada != 0) {
+                      atendePrioridade =
+                          tarefa.prioridade == prioridadeSelecionada;
+                    }
+
+                    if (horaController.text.isNotEmpty) {
+                      atendeHora = tarefa.hora == data!;
+                    }
+
+                    if (nomeController.text.isNotEmpty) {
+                      atendeNome = tarefa.nome == nomeController.text;
+                    }
+
+                    if (descricaoController.text.isNotEmpty) {
+                      atendeDescricao =
+                          tarefa.descricao == descricaoController.text;
+                    }
+
+                    return atendePrioridade &&
+                        atendeHora &&
+                        atendeNome &&
+                        atendeDescricao;
+                  }).toList();
 
                   listaPesquisada.sort((a, b) => a.hora.compareTo(b.hora));
 
-                  print(listaPesquisada.toString());
-
                   setState(() {});
                 },
-                child: Text(
+                child: const Text(
                   'Pesquisar',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Expanded(
             child: ListView.builder(
               itemCount: listaPesquisada.length,

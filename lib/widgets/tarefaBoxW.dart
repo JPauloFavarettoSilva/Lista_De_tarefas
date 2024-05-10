@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lista_de_tarefas/classes/Tarefa.dart';
+import 'package:lista_de_tarefas/front/inicial.dart';
+import 'package:lista_de_tarefas/front/pesquisar.dart';
 
-
-    String _formatarData(DateTime data) {
+String _formatarData(DateTime data) {
   return DateFormat('dd/MM/yyyy HH:mm').format(data);
 }
-
 
 class TarefaBoxWidget extends StatefulWidget {
   final TarefaBox valor;
@@ -22,7 +22,7 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
   TextEditingController campoDescricao = TextEditingController();
   bool concluida = false;
 
-@override
+  @override
   void initState() {
     super.initState();
     campoDescricao.text = '${widget.valor.descricao}';
@@ -37,8 +37,8 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
         });
       },
       child: Container(
-        margin: EdgeInsets.all(8.0),
-        padding: EdgeInsets.all(16.0),
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),
@@ -49,7 +49,7 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(5, 5, 20, 5),
+              padding: const EdgeInsets.fromLTRB(5, 5, 20, 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -59,14 +59,13 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(5, 5, 20, 5),
+              padding: const EdgeInsets.fromLTRB(5, 5, 20, 5),
               child: Row(
                 children: [
                   Text('Prioridade: ${widget.valor.prioridade}'),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                    child: Text('Concluída:')
-                    ),
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
+                      child: Text('Concluída:')),
                   Checkbox(
                     value: concluida,
                     onChanged: (value) {
@@ -85,9 +84,8 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
                   controller: campoDescricao,
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Sua tarefa',
-
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -98,4 +96,3 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
     );
   }
 }
-

@@ -3,6 +3,33 @@ import 'package:lista_de_tarefas/classes/Tarefa.dart';
 import 'package:intl/intl.dart';
 import 'package:lista_de_tarefas/front/inicial.dart';
 
+enum Prioridade {
+  baixa,
+  media,
+  alta,
+  critica,
+  urgente
+}
+
+extension PrioridadeExtension on Prioridade {
+  String get formattedName {
+    switch (this) {
+      case Prioridade.baixa:
+        return 'Baixa';
+      case Prioridade.media:
+        return 'Média';
+      case Prioridade.alta:
+        return 'Alta';
+      case Prioridade.critica:
+        return 'Crítica';
+      case Prioridade.urgente:
+        return 'Urgente';
+      default:
+        return '';
+    }
+  }
+}
+
 class CadastroTarefa extends StatefulWidget {
   late final List<TarefaBox> listaTarefas;
 
@@ -18,6 +45,8 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
   final TextEditingController descricaoController = TextEditingController();
 
   int prioridadeSelecionada = 1;
+
+  Prioridade prioridadeView = Prioridade.baixa;
 
   List<TarefaBox> listaTarefas = [];
 
@@ -81,19 +110,31 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
                       ),
                     ),
                     const SizedBox(height: 8.0),
-                    DropdownButton<int>(
-                      value: prioridadeSelecionada,
-                      onChanged: (int? novoVal) {
-                        setState(() {
-                          prioridadeSelecionada = novoVal!;
-                        });
-                      },
-                      items: List.generate(5, (index) {
-                        return DropdownMenuItem<int>(
-                          value: index + 1,
-                          child: Text((index + 1).toString()),
-                        );
-                      }),
+                    Row(
+                      children: [
+                        SegmentedButton<Prioridade>(
+                          segments: const <ButtonSegment<Prioridade>>[
+                            ButtonSegment<Prioridade>(
+                                value: Prioridade.baixa, label: Text('Baixa')),
+                            ButtonSegment<Prioridade>(
+                                value: Prioridade.media, label: Text('Média')),
+                            ButtonSegment<Prioridade>(
+                                value: Prioridade.alta, label: Text('Alta')),
+                            ButtonSegment<Prioridade>(
+                                value: Prioridade.urgente,
+                                label: Text('Urgente')),
+                            ButtonSegment<Prioridade>(
+                                value: Prioridade.critica,
+                                label: Text('Crítica')),
+                          ],
+                          selected: <Prioridade>{prioridadeView},
+                          onSelectionChanged: (Set<Prioridade> newSelection) {
+                            setState(() {
+                              prioridadeView = newSelection.first;
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -160,7 +201,7 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
                     TarefaBox novaTarefa = TarefaBox(
                       nome: nomeController.text,
                       hora: data!,
-                      prioridade: prioridadeSelecionada,
+                      prioridade: prioridadeView.formattedName, 
                       descricao: descricaoController.text,
                       concluida: false,
                     );
@@ -180,8 +221,6 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
                     nomeController.clear();
                     horaController.clear();
                     descricaoController.clear();
-                    prioridadeSelecionada = 1;
-
                     return;
                   },
                   child: const Text(

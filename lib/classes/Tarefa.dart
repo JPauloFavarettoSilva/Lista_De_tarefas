@@ -2,7 +2,7 @@ class TarefaBox {
   final String nome;
   final DateTime hora;
   final String? descricao;
-  final int prioridade;
+  final String prioridade;
   late final bool concluida;
 
   TarefaBox({

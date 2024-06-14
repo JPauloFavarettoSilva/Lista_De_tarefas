@@ -69,17 +69,6 @@ class _TelaInicialState extends State<TelaInicial> {
               },
             ),
             ListTile(
-              title: const Text('Completas'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          Concluidas(listaTarefas: listaTarefas)),
-                );
-              },
-            ),
-            ListTile(
               title: const Text('Pesquisar'),
               onTap: () {
                 Navigator.push(

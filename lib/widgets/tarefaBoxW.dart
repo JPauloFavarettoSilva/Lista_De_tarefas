@@ -21,11 +21,27 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
   bool clicado = false;
   TextEditingController campoDescricao = TextEditingController();
   bool concluida = false;
+  Color _currentColor = Colors.white;
+  String _currentText = 'Concluir';
 
   @override
   void initState() {
     super.initState();
     campoDescricao.text = '${widget.valor.descricao}';
+  }
+
+  void _changeColor() {
+    setState(() {
+      // Alternar entre azul e vermelho
+      _currentColor =
+          (_currentColor == Colors.white) ? Colors.green : Colors.white;
+    });
+  }
+
+  void _changeText() {
+    setState(() {
+      _currentText = (_currentText == 'Concluir') ? 'Voltar' : 'Concluir';
+    });
   }
 
   @override
@@ -40,7 +56,7 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: _currentColor,
           borderRadius: BorderRadius.circular(8.0),
           border: Border.all(color: Colors.grey.shade300, width: 1.0),
         ),
@@ -64,16 +80,18 @@ class _TarefaBoxWidgetState extends State<TarefaBoxWidget> {
                 children: [
                   Text('Prioridade: ${widget.valor.prioridade}'),
                   const Padding(
-                      padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
-                      child: Text('Concluída:')),
-                  Checkbox(
-                    value: concluida,
-                    onChanged: (value) {
-                      setState(() {
-                        concluida = !concluida;
-                      });
-                    },
+                    padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(200, 5, 5, 5),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          concluida = !concluida;
+                          _changeColor();
+                          _changeText();
+                        },
+                        child: Text(_currentText)),
+                  )
                 ],
               ),
             ),

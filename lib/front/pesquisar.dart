@@ -3,13 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:lista_de_tarefas/classes/Tarefa.dart';
 import 'package:lista_de_tarefas/widgets/tarefaBoxW.dart';
 
-enum Prioridade { baixa, media, alta, critica, urgente }
-
-enum PesquisaPrioridade { nula, baixa, media, alta, critica, urgente }
+enum Prioridade { nula, baixa, media, alta, critica, urgente }
 
 extension PrioridadeExtension on Prioridade {
   String get formattedName {
     switch (this) {
+      case Prioridade.nula:
+        return 'Nenhuma';
       case Prioridade.baixa:
         return 'Baixa';
       case Prioridade.media:
@@ -27,6 +27,8 @@ extension PrioridadeExtension on Prioridade {
 
   static Prioridade? fromFormattedName(String name) {
     switch (name) {
+      case 'Nenhuma':
+        return Prioridade.nula;
       case 'Baixa':
         return Prioridade.baixa;
       case 'Média':
@@ -180,11 +182,15 @@ class _PesquisarState extends State<Pesquisar> {
                     }
 
                     listaPesquisada = listaTarefas.where((tarefa) {
-                      bool atendePrioridade = tarefa.prioridade ==
-                          prioridadeSelecionada.formattedName;
+                      bool atendePrioridade = true;
                       bool atendeHora = true;
                       bool atendeNome = true;
                       bool atendeDescricao = true;
+
+                      if (prioridadeSelecionada != Prioridade.nula) {
+                        atendePrioridade = tarefa.prioridade ==
+                            prioridadeSelecionada.formattedName;
+                      }
 
                       if (horaController.text.isNotEmpty) {
                         atendeHora = tarefa.hora == data!;

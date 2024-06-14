@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lista_de_tarefas/classes/Tarefa.dart';
 import 'package:intl/intl.dart';
 import 'package:lista_de_tarefas/front/inicial.dart';
+import 'package:http/http.dart' as http;
 
-enum Prioridade {
-  baixa,
-  media,
-  alta,
-  critica,
-  urgente
-}
+enum Prioridade { baixa, media, alta, critica, urgente }
 
 extension PrioridadeExtension on Prioridade {
   String get formattedName {
@@ -201,7 +196,7 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
                     TarefaBox novaTarefa = TarefaBox(
                       nome: nomeController.text,
                       hora: data!,
-                      prioridade: prioridadeView.formattedName, 
+                      prioridade: prioridadeView.formattedName,
                       descricao: descricaoController.text,
                       concluida: false,
                     );
@@ -209,6 +204,17 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
                     listaTarefas.add(novaTarefa);
 
                     listaTarefas.sort((a, b) => a.hora.compareTo(b.hora));
+
+                    try {
+                      final response = http
+                          .post(Uri.parse('https://localhost:7020/api/task'));
+
+                      if (response == 200) {
+                        setState(() {});
+                      }
+                    } catch (e) {
+                      setState(() {});
+                    }
 
                     Navigator.push(
                       context,

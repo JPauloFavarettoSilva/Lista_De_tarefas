@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lista_de_tarefas/classes/Tarefa.dart';
-import 'package:lista_de_tarefas/front/inicial.dart';
-import 'package:lista_de_tarefas/front/pesquisar.dart';
 
 String _formatarData(DateTime data) {
   return DateFormat('dd/MM/yyyy HH:mm').format(data);
